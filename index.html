@@ -2,160 +2,303 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Зерно Онлайн — Презентация Сергея Коротеева</title>
+    <title>Презентация: Как устроен рынок зерна изнутри</title>
     <style>
-        :root {
-            --bg-dark: #0f1113;
-            --bg-card: #16191c;
-            --accent-gold: #d4af37;
-            --accent-green: #27ae60;
-            --text-light: #ffffff;
-            --text-muted: #959da5;
+        /* Настройки страницы для PDF-верстки 16:9 */
+        @page {
+            size: 1920px 1080px;
+            margin: 0;
+        }
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 1920px;
+            height: 1080px;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+            background: radial-gradient(circle at 10% 20%, #111827 0%, #030712 100%);
+            color: #f3f4f6;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            overflow: hidden;
+            position: relative;
+        }
+        /* Панель управления (скрывается при экспорте в PDF) */
+      .no-print-bar {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            z-index: 9999;
+            background: rgba(17, 24, 39, 0.95);
+            padding: 12px 24px;
+            border-radius: 10px;
+            border: 1px solid #fbbf24;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+      .print-btn {
+            background: #fbbf24;
+            color: #030712;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+      .print-btn:hover {
+            background: #f59e0b;
+            transform: translateY(-1px);
+        }
+      .print-hint {
+            font-size: 15px;
+            color: #9ca3af;
+        }
+        /* Фоновая графика в стиле предыдущих слайдов */
+      .bg-overlay {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            width: 50%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1530595467537-0b5996c41f2d?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+            mask-image: linear-gradient(to top, rgba(0,0,0,0.7) 30%, rgba(0,0,0,0) 100%), linear-gradient(to left, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 100%);
+            -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,0.7) 30%, rgba(0,0,0,0) 100%), linear-gradient(to left, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 100%);
+            opacity: 0.15;
+            z-index: 1;
+        }
+        /* Контентная область */
+      .container {
+            padding: 80px 100px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            z-index: 2;
+            box-sizing: border-box;
+        }
+      .header-meta {
+            font-size: 18px;
+            font-weight: 800;
+            color: #fbbf24;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+      .main-title {
+            font-size: 56px;
+            font-weight: 900;
+            margin: 0 0 45px 0;
+            letter-spacing: -1px;
+            background: linear-gradient(135deg, #ffffff 60%, #9ca3af 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* Трехколоночная сетка */
+      .grid-cols {
+            display: flex;
+            gap: 40px;
+            margin-bottom: auto;
+        }
+      .col {
+            flex: 1;
+            background: rgba(17, 24, 39, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 35px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+      .col-header {
+            font-size: 16px;
+            font-weight: 800;
+            color: #9ca3af;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 25px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 15px;
+        }
+        /* Стили первой колонки (процесс) */
+      .process-step {
+            margin-bottom: 20px;
+            position: relative;
+            padding-left: 30px;
+        }
+      .process-step::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 10px;
+            height: 10px;
+            background: #fbbf24;
+            border-radius: 50%;
+        }
+      .process-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 5px;
+        }
+      .process-desc {
+            font-size: 17px;
+            color: #9ca3af;
+            line-height: 1.4;
+        }
+        /* Стили второй колонки (акцентная плашка) */
+      .action-card {
+            background: linear-gradient(185deg, rgba(251, 191, 36, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%);
+            border-left: 5px solid #fbbf24;
+            padding: 25px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 10px;
+        }
+      .action-highlight {
+            font-size: 24px;
+            font-weight: 800;
+            color: #fbbf24;
+            margin-bottom: 15px;
+            line-height: 1.3;
+        }
+      .action-text {
+            font-size: 18px;
+            color: #e5e7eb;
+            line-height: 1.5;
+        }
+        /* Стили третьей колонки (расчеты) */
+      .payment-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+      .payment-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.02);
+            padding: 12px 20px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+      .payment-icon {
+            font-size: 24px;
+            background: rgba(251, 191, 36, 0.1);
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+      .payment-text {
+            font-size: 19px;
+            font-weight: 600;
+            color: #f3f4f6;
+        }
+        /* Нижняя строка слайда */
+      .footer-text {
+            font-size: 20px;
+            color: #9ca3af;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 25px;
+            margin-top: 40px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+      .footer-text span {
+            color: #fbbf24;
+            font-weight: 700;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
-        body { background-color: var(--bg-dark); color: var(--text-light); line-height: 1.6; }
-        .container { max-width: 1140px; margin: 0 auto; padding: 0 25px; position: relative; z-index: 1; }
-        .section-title { font-size: 38px; text-align: center; margin-bottom: 60px; font-weight: 700; }
-        .section-title span { color: var(--accent-gold); }
-
-        /* HERO SECTION */
-        .slide-hero {
-            height: 100vh; display: flex; align-items: center;
-            background: linear-gradient(rgba(15,17,19,0.7), rgba(15,17,19,0.9)), url('1.jpeg') no-repeat center center/cover;
-            border-bottom: 2px solid rgba(212,175,55,0.2);
+        /* Настройки для вывода в PDF */
+        @media print {
+          .no-print-bar {
+                display: none!important;
+            }
+            body {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
         }
-        .hero-logo { height: 60px; margin-bottom: 30px; }
-        .hero-box h1 { font-size: 50px; line-height: 1.2; margin-bottom: 25px; }
-        .hero-box h1 span { color: var(--accent-gold); display: block; }
-        .btn-gold { 
-            display: inline-block; background: var(--accent-gold); color: #000; 
-            padding: 16px 35px; text-decoration: none; font-weight: 700; border-radius: 4px;
-        }
-
-        /* GRID BLOCKS */
-        .slide-section { padding: 100px 0; }
-        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
-        .expert-block { display: flex; align-items: center; gap: 50px; flex-wrap: wrap; }
-        .expert-media, .expert-content { flex: 1; min-width: 300px; }
-        .expert-img { width: 100%; height: 450px; object-fit: cover; border-radius: 8px; border: 1px solid var(--accent-gold); }
-
-        /* PRODUCTS */
-        .product-item { background: var(--bg-card); border-radius: 8px; overflow: hidden; }
-        .product-photo { width: 100%; height: 220px; object-fit: cover; }
-        .product-details { padding: 25px; }
-        .product-details h3 { color: var(--accent-gold); margin-bottom: 10px; }
-
-        /* PRICING */
-        .price-card { background: var(--bg-card); padding: 40px; border-radius: 8px; border: 1px solid #222; }
-        .price-card.vip { border: 2px solid var(--accent-gold); }
-        .price-sum { font-size: 36px; font-weight: 800; margin: 20px 0; }
-
-        footer { padding: 40px; text-align: center; color: var(--text-muted); font-size: 13px; }
     </style>
 </head>
 <body>
 
-    <header class="slide-hero">
-        <div class="container">
-            <div class="hero-box">
-                <img src="Грейн-Фудс1.png" alt="Логотип" class="hero-logo">
-                <h1>ЗЕРНО ОНЛАЙН <span>Бизнес на поставках из дома</span></h1>
-                <p style="margin-bottom: 40px; font-size: 18px; color: var(--text-muted);">Пошаговая модель от лидера отрасли с оборотом $3 000 000 в год[cite: 1].</p>
-                <a href="https://zernokoroteev.getcourse.ru/Pay" class="btn-gold">Занять место</a>
-            </div>
-        </div>
-    </header>
+    <div class="no-print-bar">
+        <button class="print-btn" onclick="window.print()">Сохранить слайд в PDF</button>
+        <span class="print-hint">← Нажмите для сохранения в 16:9 без водяных знаков</span>
+    </div>
 
-    <section class="slide-section">
-        <div class="container">
-            <div class="expert-block">
-                <div class="expert-media"><img src="5.jpeg" class="expert-img"></div>
-                <div class="expert-content">
-                    <h2 class="section-title" style="text-align: left;">Сергей <span>Коротеев</span></h2>
-                    <p style="margin-bottom: 20px;">19 лет в оптовой торговле. Собственник компании ГРЕЙН ФУДС[cite: 1].</p>
-                    <ul style="list-style: none; color: var(--text-muted);">
-                        <li>✓ Оборот $3 000 000 в год[cite: 1]</li>
-                        <li>✓ Лидер отрасли Ленинградской области[cite: 1]</li>
-                        <li>✓ Обучил более 240 сотрудников[cite: 1]</li>
-                    </ul>
-                </div>
-            </div>
+    <div class="bg-overlay"></div>
+    
+    <div class="container">
+        <div>
+            <div class="header-meta">Анатомия ниши • Схема работы</div>
+            <h1 class="main-title">КАК УСТРОЕН РЫНОК ИЗНУТРИ</h1>
         </div>
-    </section>
-
-    <section class="slide-section" style="background: #121518;">
-        <div class="container">
-            <h2 class="section-title">Наша <span>Продукция</span></h2>
-            <div class="grid-3">
-                <div class="product-item">
-                    <img src="IMG_3093.jpeg" class="product-photo">
-                    <div class="product-details"><h3>Кукуруза кормовая</h3><p>Стабильный спрос от птицефабрик[cite: 1].</p></div>
+        
+        <div class="grid-cols">
+            <div class="col">
+                <div class="col-header">1. Путь зерна у фермера</div>
+                <div class="process-step">
+                    <div class="process-title">Посев и уборка</div>
+                    <div class="process-desc">Производители сеют зерно на полях и собирают урожай.</div>
                 </div>
-                <div class="product-item">
-                    <img src="IMG_3135.jpeg" class="product-photo">
-                    <div class="product-details"><h3>Отруби пшеничные</h3><p>Высокая оборачиваемость сырья[cite: 1].</p></div>
+                <div class="process-step">
+                    <div class="process-title">Продажа «с колёс» (на току)</div>
+                    <div class="process-desc">Часть зерна моментально продают трейдерам прямо с поля.</div>
                 </div>
-                <div class="product-item">
-                    <img src="IMG_3102.jpeg" class="product-photo">
-                    <div class="product-details"><h3>Отходы овса</h3><p>Отличная маржа для новичков[cite: 1].</p></div>
+                <div class="process-step" style="margin-bottom: 0;">
+                    <div class="process-title">Ответхранение</div>
+                    <div class="process-desc">Остальное увозят на свои склады или на элеваторы.</div>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <section class="slide-section">
-        <div class="container">
-            <div class="expert-block" style="flex-direction: row-reverse;">
-                <div class="expert-media"><img src="2.jpeg" class="expert-img"></div>
-                <div class="expert-content">
-                    <h2>Контроль <span>качества</span></h2>
-                    <p style="color: var(--text-muted);">На практикуме разберем, как проверять зерно и не терять деньги на соре и влажности[cite: 1].</p>
+            
+            <div class="col" style="border: 1px solid rgba(251, 191, 36, 0.15);">
+                <div class="col-header">2. Ваша точка входа</div>
+                <div class="action-card">
+                    <div class="action-highlight">Разговор на одном языке 🗣️</div>
+                    <div class="action-text">
+                        Любой из вас — позвонив фермеру и поговорив с ним на понятном ему профессиональном сленге, сможет заключить контракт на покупку зерна. 
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <section class="slide-section" style="background: #121518;">
-        <div class="container">
-            <h2 class="section-title">Тарифы <span>обучения</span></h2>
-            <div class="grid-3">
-                <div class="price-card">
-                    <h3>Старт</h3>
-                    <div class="price-sum">70 000 ₽</div>
-                    <p style="color: var(--text-muted);">30 дней обучения и чат[cite: 1].</p>
-                </div>
-                <div class="price-card vip">
-                    <h3>VIP с гарантией</h3>
-                    <div class="price-sum">135 000 ₽</div>
-                    <p style="color: var(--text-muted);">Личное наставничество Сергея Коротеева[cite: 1].</p>
-                </div>
-                <div class="price-card">
-                    <h3>Бизнес под ключ</h3>
-                    <div class="price-sum">2.5 млн ₽</div>
-                    <p style="color: var(--text-muted);">Копия компании ГРЕЙН ФУДС в вашем регионе[cite: 1].</p>
+            
+            <div class="col">
+                <div class="col-header">3. Способы расчетов</div>
+                <div class="payment-list">
+                    <div class="payment-item">
+                        <span class="payment-icon">💳</span>
+                        <span class="payment-text">Безналичный расчет</span>
+                    </div>
+                    <div class="payment-item">
+                        <span class="payment-icon">💵</span>
+                        <span class="payment-text">Наличные средства</span>
+                    </div>
+                    <div class="payment-item">
+                        <span class="payment-icon">🔄</span>
+                        <span class="payment-text">Бартер (ГСМ, семена)</span>
+                    </div>
+                    <div class="payment-item" style="border: 1px dashed rgba(251, 191, 36, 0.3);">
+                        <span class="payment-icon" style="background: rgba(16, 185, 129, 0.15);">🤝</span>
+                        <span class="payment-text" style="color: #fbbf24;">За «красивые глаза»</span>
+                    </div>
                 </div>
             </div>
         </div>
-    </section>
-
-    <section class="slide-section">
-        <div class="container">
-            <div class="expert-block">
-                <div class="expert-media"><img src="4.jpeg" class="expert-img"></div>
-                <div class="expert-content">
-                    <h2>Успейте <span>занять место</span></h2>
-                    <p style="margin-bottom: 30px;">В группе всего 10 мест. Вход через собеседование[cite: 1].</p>
-                    <a href="https://zernokoroteev.getcourse.ru/Pay" class="btn-gold">Записаться сейчас</a>
-                </div>
-            </div>
+        
+        <div class="footer-text">
+            <span>💡 Суть модели:</span> Вам не нужно владеть полями или элеваторами. Ваша задача — связать стороны сделки, используя правильный язык общения. Внутреннее потребление зерна в РФ составляет 82–87 млн тонн в год [2] — этого объема хватит на всех.
         </div>
-    </section>
-
-    <footer>
-        <p>&copy; 2026 ГРЕЙН ФУДС. Лидер отрасли в Ленинградской области[cite: 1].</p>
-    </footer>
-
+    </div>
 </body>
 </html>
